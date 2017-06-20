@@ -15,12 +15,11 @@ var definePlugin = new webpack.DefinePlugin({
 module.exports = {
   entry: {
     app: [
-      'babel-polyfill',
-      path.resolve(__dirname, 'src/main.js')
+      path.resolve(__dirname, 'src/index.ts')
     ],
     vendor: ['pixi', 'p2', 'phaser', 'webfontloader']
   },
-  devtool: 'cheap-source-map',
+  devtool: 'source-map',
   output: {
     pathinfo: true,
     path: path.resolve(__dirname, 'dist'),
@@ -41,7 +40,8 @@ module.exports = {
   ],
   module: {
     rules: [
-      { test: /\.js$/, use: ['babel-loader'], include: path.join(__dirname, 'src') },
+      // { test: /\.js$/, use: ['babel-loader'], include: path.join(__dirname, 'src') },
+      { test: /\.tsx?$/, loader: "awesome-typescript-loader" , include: path.join(__dirname, 'src')},
       { test: /pixi\.js/, use: ['expose-loader?PIXI'] },
       { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
       { test: /p2\.js/, use: ['expose-loader?p2'] }
@@ -57,6 +57,11 @@ module.exports = {
       'phaser': phaser,
       'pixi': pixi,
       'p2': p2
-    }
+    }, extensions: [
+      '.ts'
+    ]
+  },
+  externals: {
+    // "phaser": "Phaser"
   }
 }
