@@ -2,7 +2,6 @@ import {Mushroom} from '../sprites/mushroom'
 import {setResponsiveWidth} from '../utils'
 
 export class GameState extends Phaser.State {
-  mushroom: Mushroom
 
   init () {}
   preload () {}
@@ -14,21 +13,29 @@ export class GameState extends Phaser.State {
     banner.fill = '#77BFA3'
     banner.anchor.setTo(0.5)
 
-    this.mushroom = new Mushroom({
-      game: this.game,
-      x: this.game.world.centerX,
-      y: this.game.world.centerY,
-      asset: 'mushroom'
-    })
-
-    // set the sprite width to 30% of the game width
-    setResponsiveWidth(this.mushroom, 30, this.game.world)
-    this.game.add.existing(this.mushroom)
+    this.addSprite(new Phaser.Point(500,500));
   }
 
   render () {
-    if (window['__DEV__']) {
-      this.game.debug.spriteInfo(this.mushroom, 32, 32)
+  }
+
+  update() {
+    if (this.game.input.mousePointer.justPressed(30)) {
+      this.addSprite(this.game.input.mousePointer.position);
     }
+  }
+
+  addSprite(position: Phaser.Point) {
+    const mushroom = new Mushroom({
+      game: this.game,
+      x: position.x,
+      y: position.y,
+      asset: 'mushroom',
+      target: new Phaser.Point(500,500)
+    })
+    // set the sprite width to 30% of the game width
+    setResponsiveWidth(mushroom, 30, this.game.world)
+    this.game.add.existing(mushroom)
+    this.game.physics.enable(mushroom, Phaser.Physics.ARCADE)
   }
 }
